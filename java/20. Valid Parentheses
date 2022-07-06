@@ -1,0 +1,46 @@
+class Solution {
+    public boolean isValid(String s) {
+        char[] letters = s.toCharArray();
+        Map<Character, Character> map = new HashMap<>();
+        Map<Character, Character> map2 = new HashMap<>();
+        Map<Character, Integer> tracker = new HashMap<>();
+        map.put('(', ')');
+        map.put('[', ']');
+        map.put('{', '}');
+
+        map2.put('}', '{');
+        map2.put(']', '[');
+        map2.put(')', '(');
+
+
+        tracker.put('(', 0);
+        tracker.put('[', 0);
+        tracker.put('{', 0);
+        
+        List<Character> last = new ArrayList<>();
+
+        for (Character i: letters) {
+            if (map.containsKey(i)) {
+                tracker.put(i, tracker.get(i) - 1); //means key, -1  //we have an opening
+                last.add(0, i);
+            } else {
+                tracker.put(map2.get(i),tracker.get(map2.get(i)) + 1);
+                
+                if (!(last.size() > 0)) {
+                    return false;
+                }
+                if (!(map2.get(i) == last.get(0))) {
+                    return false;
+                } else {
+                    last.remove(0);
+                }
+            }
+
+        }
+        if (tracker.get('{') < 0 || tracker.get('[') < 0 || tracker.get('(') < 0) {
+            return false;
+        }
+        return true;
+
+    }
+}
